@@ -12,10 +12,14 @@ public class AngleHandler extends Handler {
 
 	@Override
 	public String handle() {
-		_game.submit();
+		int stage = Integer.parseInt(_request.getParameter("stage").trim());
+		int round = Integer.parseInt(_request.getParameter("round").trim());
 		double angle = Double.parseDouble(_request.getParameter("angle"));
-        System.out.println("angle: " + angle);
-        return "OK";
+		String idStr = _request.getParameter("id").trim();
+		int id = Integer.parseInt(idStr);
+		_game.submit(id);
+		_game.getPlayer(id).setAngle(stage, round, angle);
+		return "OK";
 	}
 
 }

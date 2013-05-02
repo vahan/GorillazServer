@@ -12,9 +12,14 @@ public class MeanHandler extends Handler {
 
 	@Override
 	public String handle() {
-		if (_game.isReady())
-			return (new Double(_game.getMeanAngle())).toString();
-		return "NO";
+		int stage = Integer.parseInt(_request.getParameter("stage"));
+		int round = Integer.parseInt(_request.getParameter("round"));
+		if (_game.isReady(stage, round)) {
+			String mean = (new Double(_game.getMeanAngle(stage, round))).toString();
+			System.out.println("mean: " + mean);
+			return mean;
+		}
+		return "ERROR: GAME IS NOT READY";
 	}
 
 }

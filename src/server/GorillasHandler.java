@@ -4,7 +4,6 @@ import game.Game;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Enumeration;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -32,7 +31,7 @@ public class GorillasHandler extends AbstractHandler {
         
         _handler = getHandler(request);
         if (_handler == null) {
-        	response.getWriter().print("NO");
+        	response.getWriter().print("ERROR: handler is null!");
         	return;
         }
         /*if (!_handler.validate()) {
@@ -53,7 +52,6 @@ public class GorillasHandler extends AbstractHandler {
     }
 	
 	
-	
 	private Handler getHandler(HttpServletRequest request) {
 		String type = request.getParameter("request");
 		if (type == null)
@@ -62,6 +60,7 @@ public class GorillasHandler extends AbstractHandler {
 			case "authenticate":	return new AuthenticationHandler(request, _game);
 			case "angle":			return new AngleHandler(request, _game);
 			case "mean":			return new MeanHandler(request, _game);
+			case "next":			return new NextHandler(request, _game);
 			default:				return null;
 		}
 	}

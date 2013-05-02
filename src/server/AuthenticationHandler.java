@@ -25,8 +25,7 @@ public class AuthenticationHandler extends Handler {
         	System.err.println("ID: " + id + ". The room is full. " + Game.PLAYER_COUNT + "are already here");
         	return "-1";
         }
-        _game.setStage(1);
-        _game.setRound(0);
+        _game.start();
         String idStr = (new Integer(id)).toString();
         System.out.println("ID assigned: " + idStr);
 		return idStr;
