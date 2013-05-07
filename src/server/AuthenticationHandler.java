@@ -14,18 +14,18 @@ public class AuthenticationHandler extends Handler {
 	
 	@Override
 	public String handle() {
-		Enumeration<String> params = _request.getParameterNames();
+		Enumeration<String> params = request.getParameterNames();
 		while (params.hasMoreElements()) {
 			final String param = params.nextElement();
-			System.out.println(param + ": " + _request.getParameter(param));
+			System.out.println(param + ": " + request.getParameter(param));
 		}
 		
-        int id = _game.addPlayer();
+        int id = game.addPlayer();
         if (id < 0) {
         	System.err.println("ID: " + id + ". The room is full. " + Game.PLAYER_COUNT + "are already here");
         	return "-1";
         }
-        _game.start();
+        game.start();
         String idStr = (new Integer(id)).toString();
         System.out.println("ID assigned: " + idStr);
 		return idStr;

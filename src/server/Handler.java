@@ -7,18 +7,18 @@ import javax.servlet.http.HttpServletRequest;
 
 public abstract class Handler {
 	
-	protected Game _game;
-	protected HttpServletRequest _request;
-	protected Player _player;
-	protected int _stage;
-	protected int _round;
+	protected Game game;
+	protected HttpServletRequest request;
+	protected Player player;
+	protected int stage;
+	protected int round;
 	
 	public Handler(HttpServletRequest request, Game game) {
-		_game = game;
-		_request = request;
-		_stage = getStage();
-		_round = getRound();
-		_player = getPlayer();
+		this.game = game;
+		this.request = request;
+		this.stage = getStage();
+		this.round = getRound();
+		this.player = getPlayer();
 	}
 	
 	public abstract String handle();
@@ -26,8 +26,8 @@ public abstract class Handler {
 
 	private Player getPlayer() {
 		try {
-			int id = Integer.parseInt(_request.getParameter("id"));
-			Player player = _game.getPlayer(id);
+			int id = Integer.parseInt(request.getParameter("id"));
+			Player player = game.getPlayer(id);
 			return player;
 		} catch (NumberFormatException ex) {
 			return null;
@@ -36,7 +36,7 @@ public abstract class Handler {
 	
 	private int getStage() {
 		try {
-			int stage = Integer.parseInt(_request.getParameter("stage"));
+			int stage = Integer.parseInt(request.getParameter("stage"));
 			return stage;
 		} catch (NumberFormatException ex) {
 			return -1;
@@ -45,7 +45,7 @@ public abstract class Handler {
 
 	private int getRound() {
 		try {
-			int round = Integer.parseInt(_request.getParameter("round"));
+			int round = Integer.parseInt(request.getParameter("round"));
 			return round;
 		} catch (NumberFormatException ex) {
 			return -1;

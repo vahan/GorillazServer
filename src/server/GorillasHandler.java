@@ -3,7 +3,6 @@ package server;
 import game.Game;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -14,11 +13,11 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 
 public class GorillasHandler extends AbstractHandler {
 	
-	private Handler _handler;
-	private Game _game;
+	private Handler handler;
+	private Game game;
 	
 	public GorillasHandler(Game game) {
-		_game = game;
+		this.game = game;
 	}
 	
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) 
@@ -29,8 +28,8 @@ public class GorillasHandler extends AbstractHandler {
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);
         
-        _handler = getHandler(request);
-        if (_handler == null) {
+        handler = getHandler(request);
+        if (handler == null) {
         	response.getWriter().print("ERROR: handler is null!");
         	return;
         }
@@ -41,14 +40,14 @@ public class GorillasHandler extends AbstractHandler {
         	return;
         }*/
         
-        String resp = _handler.handle();
+        String resp = handler.handle();
         if (resp == null) return;
         System.out.println("response: " + resp);
         response.getWriter().println(resp);
-        System.out.println("Response sent: " + Arrays.toString(response.getHeaderNames().toArray()));
+        /*System.out.println("Response sent: " + Arrays.toString(response.getHeaderNames().toArray()));
         for (String header : response.getHeaderNames()) {
         	System.out.println(header + ": " + response.getHeader(header));
-        }
+        }*/
     }
 	
 	
@@ -57,10 +56,10 @@ public class GorillasHandler extends AbstractHandler {
 		if (type == null)
 			return null;
 		switch (type) {
-			case "authenticate":	return new AuthenticationHandler(request, _game);
-			case "angle":			return new AngleHandler(request, _game);
-			case "mean":			return new MeanHandler(request, _game);
-			case "next":			return new NextHandler(request, _game);
+			case "authenticate":	return new AuthenticationHandler(request, game);
+			case "angle":			return new AngleHandler(request, game);
+			case "mean":			return new MeanHandler(request, game);
+			case "next":			return new NextHandler(request, game);
 			default:				return null;
 		}
 	}

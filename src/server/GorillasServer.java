@@ -4,6 +4,9 @@ import game.Game;
 
 import org.eclipse.jetty.server.*;
 
+import server.GorillasHandler;
+import views.GameView;
+
 public class GorillasServer {
 	public static void main(String[] args) throws Exception
 	{
@@ -14,6 +17,11 @@ public class GorillasServer {
 		server.setHandler(new GorillasHandler(game));
 		
 		server.start();
+		
+		GameView gameView = new GameView(game);
+		game.addObserver(gameView);
+		javax.swing.SwingUtilities.invokeLater(gameView);
+		
 		server.join();
 	}
 }

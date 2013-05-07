@@ -12,14 +12,14 @@ public class NextHandler extends Handler {
 
 	@Override
 	public String handle() {
-		boolean isReady = _game.isReady();
-		String idStr = _request.getParameter("id").trim();
+		boolean isReady = game.isReady();
+		String idStr = request.getParameter("id").trim();
 		int id = Integer.parseInt(idStr);
 		System.out.println("game is ready: " + isReady);
 		if (isReady) {
-			_game.goToNext(id);
+			game.goToNext(id);
 		}
-		return isReady ? _game.getPlayer(id).getStage() + ":" + _game.getPlayer(id).getRound() : "0";
+		return isReady ? game.getPlayer(id).getStage() + ":" + game.getPlayer(id).getRound() : "0";
 	}
 
 }

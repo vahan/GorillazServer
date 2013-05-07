@@ -2,55 +2,60 @@ package game;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Observable;
 
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
-
-public class Game {
+public class Game extends Observable {
 	
 	public static final int ROUND_COUNT = 5;
 	public static final int STAGE_COUNT = 8;
 	public static final int PLAYER_COUNT = 10;
 	
-	private ArrayList<Player> _players = new ArrayList<Player>();
-	private int _counter = -1;
+	private ArrayList<Player> players = new ArrayList<Player>();
+	private int counter = -1;
 	
 	
 	public int getRound(int playerId) {
-		return _players.get(playerId).getRound();
+		return players.get(playerId).getRound();
 	}
 	
 	public int getStage(int playerId) {
-		return _players.get(playerId).getStage();
+		return players.get(playerId).getStage();
 	}
 	
 	public Player getPlayer(int id) {
-		return _players.get(id);
+		return players.get(id);
+	}
+	
+	public int playerCount() {
+		return players.size();
 	}
 	
 	public int addPlayer() {
 		int id = generateId();
-		_players.add(id, new Player(id));
+		players.add(id, new Player(id));
+		setChanged();
+		notifyObservers();
 		return id;
 	}
 	
 	public void submit(int playerId) {
-		_players.get(playerId).submit();
+		players.get(playerId).submit();
 	}
 	
 	public void start() {
-		for (int i = 0; i < _players.size(); ++i) {
-			_players.get(i).start();
+		for (int i = 0; i < players.size(); ++i) {
+			players.get(i).start();
 		}
 	}
 	
 	public void goToNext(int _playerId) {
-		_players.get(_playerId).goToNext();
+		players.get(_playerId).goToNext();
 	}
 	
 	public boolean isReady(int stage, int round) {
 		boolean isReady = true;
-		for (int i = 0; i < _players.size(); ++i) {
-			Player player = _players.get(i);
+		for (int i = 0; i < players.size(); ++i) {
+			Player player = players.get(i);
 			isReady = isReady && player.isReady(stage, round);
 		}
 		return isReady;
@@ -58,23 +63,23 @@ public class Game {
 	
 	public boolean isReady() {
 		boolean isReady = true;
-		for (int i = 0; i < _players.size(); ++i) {
-			Player player = _players.get(i);
+		for (int i = 0; i < players.size(); ++i) {
+			Player player = players.get(i);
 			isReady = isReady && player.isReady(player.getStage(), player.getRound());
 		}
 		return isReady;
 	}
 	
 	public double getMeanAngle(int stage, int round) {
-		System.out.println("players: " + Arrays.toString(_players.toArray()));
+		System.out.println("players: " + Arrays.toString(players.toArray()));
 		double meanAngle = 0;
-		for (int i = 0; i < _players.size(); ++i) {
-			double angle = _players.get(i).getAngle(stage, round);
-			System.out.print(_players.get(i).toString() + " - angle: " + angle + "\t");
+		for (int i = 0; i < players.size(); ++i) {
+			double angle = players.get(i).getAngle(stage, round);
+			System.out.print(players.get(i).toString() + " - angle: " + angle + "\t");
 			meanAngle += angle;
 		}
 		System.out.println();
-		return meanAngle / _players.size();
+		return meanAngle / players.size();
 	}
 	
 	public static void finish() {
@@ -82,7 +87,7 @@ public class Game {
 	}
 	
 	private int generateId() {
-		return ++_counter;
+		return ++counter;
 	}
 	
 

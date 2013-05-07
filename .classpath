@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/home/vahan/workspace/jetty-distribution-9.0.2.v20130417/lib/jetty-server-9.0.2.v20130417.jar"/>
+	<classpathentry kind="lib" path="/home/vahan/workspace/jetty-distribution-9.0.2.v20130417/lib/jetty-client-9.0.2.v20130417.jar"/>
+	<classpathentry kind="lib" path="/home/vahan/workspace/jetty-distribution-9.0.2.v20130417/lib/jetty-util-9.0.2.v20130417.jar"/>
+	<classpathentry kind="lib" path="/home/vahan/workspace/jetty-distribution-9.0.2.v20130417/lib/servlet-api-3.0.jar"/>
+	<classpathentry kind="lib" path="/home/vahan/workspace/jetty-distribution-9.0.2.v20130417/lib/jetty-annotations-9.0.2.v20130417.jar"/>
+	<classpathentry kind="lib" path="/home/vahan/workspace/jetty-distribution-9.0.2.v20130417/lib/jetty-continuation-9.0.2.v20130417.jar"/>
+	<classpathentry kind="lib" path="/home/vahan/workspace/jetty-distribution-9.0.2.v20130417/lib/jetty-deploy-9.0.2.v20130417.jar"/>
+	<classpathentry kind="lib" path="/home/vahan/workspace/jetty-distribution-9.0.2.v20130417/lib/jetty-http-9.0.2.v20130417.jar"/>
+	<classpathentry kind="lib" path="/home/vahan/workspace/jetty-distribution-9.0.2.v20130417/lib/jetty-io-9.0.2.v20130417.jar"/>
+	<classpathentry kind="lib" path="/home/vahan/workspace/jetty-distribution-9.0.2.v20130417/lib/jetty-jaas-9.0.2.v20130417.jar"/>
+	<classpathentry kind="lib" path="/home/vahan/workspace/jetty-distribution-9.0.2.v20130417/lib/jetty-jmx-9.0.2.v20130417.jar"/>
+	<classpathentry kind="lib" path="/home/vahan/workspace/jetty-distribution-9.0.2.v20130417/lib/jetty-jndi-9.0.2.v20130417.jar"/>
+	<classpathentry kind="lib" path="/home/vahan/workspace/jetty-distribution-9.0.2.v20130417/lib/jetty-plus-9.0.2.v20130417.jar"/>
+	<classpathentry kind="lib" path="/home/vahan/workspace/jetty-distribution-9.0.2.v20130417/lib/jetty-proxy-9.0.2.v20130417.jar"/>
+	<classpathentry kind="lib" path="/home/vahan/workspace/jetty-distribution-9.0.2.v20130417/lib/jetty-rewrite-9.0.2.v20130417.jar"/>
+	<classpathentry kind="lib" path="/home/vahan/workspace/jetty-distribution-9.0.2.v20130417/lib/jetty-security-9.0.2.v20130417.jar"/>
+	<classpathentry kind="lib" path="/home/vahan/workspace/jetty-distribution-9.0.2.v20130417/lib/jetty-servlet-9.0.2.v20130417.jar"/>
+	<classpathentry kind="lib" path="/home/vahan/workspace/jetty-distribution-9.0.2.v20130417/lib/jetty-servlets-9.0.2.v20130417.jar"/>
+	<classpathentry kind="lib" path="/home/vahan/workspace/jetty-distribution-9.0.2.v20130417/lib/jetty-webapp-9.0.2.v20130417.jar"/>
+	<classpathentry kind="lib" path="/home/vahan/workspace/jetty-distribution-9.0.2.v20130417/lib/jetty-xml-9.0.2.v20130417.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

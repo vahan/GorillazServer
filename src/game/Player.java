@@ -1,71 +1,81 @@
 package game;
 
-public class Player {
+import java.util.Observable;
+
+public class Player extends Observable {
 	
-	private double[][] _angles = new double[Game.STAGE_COUNT][Game.ROUND_COUNT];
+	private double[][] angles = new double[Game.STAGE_COUNT][Game.ROUND_COUNT];
 	
-	private String _ip;
-	private int _id;
-	private int _stage;
-	private int _round;
-	private int _submitted = 0;
+	private String ip;
+	private int id;
+	private int stage;
+	private int round;
+	private int submitted = 0;
 	
 	public Player(int id) {
-		_id = id;
-		_stage = -1;
-		_round = -1;
+		this.id = id;
+		this.stage = -1;
+		this.round = -1;
 	}
 	
 	public int getId() {
-		return _id;
+		return id;
 	}
 	
 	public int getStage() {
-		return _stage;
+		return stage;
 	}
 	
 	public int getRound() {
-		return _round;
+		return round;
 	}
 	
 	public void start() {
-		_round = 0;
-		_stage = 1;
+		round = 0;
+		stage = 1;
+		setChanged();
+		notifyObservers();
 	}
 	
 	public void submit() {
-		_submitted++;
+		submitted++;
+		setChanged();
+		notifyObservers();
 	}
 	
 	public boolean isReady(int stage, int round) {
-		return _submitted == stage * round;
+		return submitted == stage * round;
 	}
 	
 	public void goToNext() {
-		if (_round < Game.ROUND_COUNT) {
-			_round++;
+		if (round < Game.ROUND_COUNT) {
+			round++;
 		} else {
-			_round = 0;
-			if (_stage < Game.STAGE_COUNT) {
-				_stage++;
+			round = 0;
+			if (stage < Game.STAGE_COUNT) {
+				stage++;
 			} else {
 				Game.finish();
 			}
 		}
+		setChanged();
+		notifyObservers();
 	}
 	
 	
 	public void setAngle(int stage, int round, double angle) {
-		_angles[stage][round] = angle;
+		angles[stage][round] = angle;
+		setChanged();
+		notifyObservers();
 	}
 	
 	public double getAngle(int stage, int round) {
-		return _angles[stage][round];
+		return angles[stage][round];
 	}
 	
 	@Override
 	public String toString() {
-		return "Player: " + _id;
+		return "Player: " + id;
 	}
 	
 
