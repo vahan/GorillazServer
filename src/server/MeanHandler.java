@@ -14,12 +14,9 @@ public class MeanHandler extends Handler {
 	public String handle() {
 		int stage = Integer.parseInt(request.getParameter("stage"));
 		int round = Integer.parseInt(request.getParameter("round"));
-		if (game.isReady(stage, round)) {
-			String mean = (new Double(game.getMeanAngle(stage, round))).toString();
-			System.out.println("mean: " + mean);
-			return mean;
-		}
-		return "ERROR: GAME IS NOT READY";
+		String mean = (new Double(game.getMeanAngle(stage, round))).toString();
+		System.out.println("mean: " + mean);
+		return mean;
 	}
 
 }

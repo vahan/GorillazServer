@@ -38,10 +38,6 @@ public class Game extends Observable {
 		return id;
 	}
 	
-	public void submit(int playerId) {
-		players.get(playerId).submit();
-	}
-	
 	public void start() {
 		for (int i = 0; i < players.size(); ++i) {
 			players.get(i).start();
@@ -52,20 +48,11 @@ public class Game extends Observable {
 		players.get(_playerId).goToNext();
 	}
 	
-	public boolean isReady(int stage, int round) {
-		boolean isReady = true;
-		for (int i = 0; i < players.size(); ++i) {
-			Player player = players.get(i);
-			isReady = isReady && player.isReady(stage, round);
-		}
-		return isReady;
-	}
-	
 	public boolean isReady() {
 		boolean isReady = true;
 		for (int i = 0; i < players.size(); ++i) {
 			Player player = players.get(i);
-			isReady = isReady && player.isReady(player.getStage(), player.getRound());
+			isReady = isReady && player.isReady();
 		}
 		return isReady;
 	}

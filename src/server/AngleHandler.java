@@ -17,7 +17,6 @@ public class AngleHandler extends Handler {
 		double angle = Double.parseDouble(request.getParameter("angle"));
 		String idStr = request.getParameter("id").trim();
 		int id = Integer.parseInt(idStr);
-		game.submit(id);
 		game.getPlayer(id).setAngle(stage, round, angle);
 		return "OK";
 	}

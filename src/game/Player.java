@@ -4,18 +4,19 @@ import java.util.Observable;
 
 public class Player extends Observable {
 	
-	private double[][] angles = new double[Game.STAGE_COUNT][Game.ROUND_COUNT];
+	private double[][] angles = new double[Game.STAGE_COUNT][Game.ROUND_COUNT + 1];
 	
 	private String ip;
 	private int id;
 	private int stage;
 	private int round;
-	private int submitted = 0;
+	private boolean submitted = false;
 	
 	public Player(int id) {
 		this.id = id;
 		this.stage = -1;
 		this.round = -1;
+		this.submitted = false;
 	}
 	
 	public int getId() {
@@ -37,14 +38,8 @@ public class Player extends Observable {
 		notifyObservers();
 	}
 	
-	public void submit() {
-		submitted++;
-		setChanged();
-		notifyObservers();
-	}
-	
-	public boolean isReady(int stage, int round) {
-		return submitted == stage * round;
+	public boolean isReady() {
+		return submitted;
 	}
 	
 	public void goToNext() {
@@ -58,6 +53,7 @@ public class Player extends Observable {
 				Game.finish();
 			}
 		}
+		submitted = false;
 		setChanged();
 		notifyObservers();
 	}
@@ -65,6 +61,7 @@ public class Player extends Observable {
 	
 	public void setAngle(int stage, int round, double angle) {
 		angles[stage][round] = angle;
+		submitted = true;
 		setChanged();
 		notifyObservers();
 	}
