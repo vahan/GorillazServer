@@ -19,7 +19,7 @@ public class NextHandler extends Handler {
 		if (isReady) {
 			game.goToNext(id);
 		}
-		return isReady ? game.getPlayer(id).getStage() + ":" + game.getPlayer(id).getRound() : "0";
+		return isReady ? game.getPlayer(id).getStage() + ":" + game.getPlayer(id).getRound() : "NO";
 	}
 
 }

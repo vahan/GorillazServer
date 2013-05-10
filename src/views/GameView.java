@@ -1,5 +1,7 @@
 package views;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -7,18 +9,26 @@ import java.util.Observer;
 
 import javax.swing.*;
 
+import org.eclipse.jetty.server.Server;
+
+import server.GorillasHandler;
+import server.GorillasServer;
+
 import game.Game;
 import game.Player;
 
-public class GameView implements Runnable, Observer {
+public class GameView implements Runnable, Observer, ActionListener {
 	
 	private Game game;
+	private GorillasServer server;
 	private List<PlayerView> playerViews = new ArrayList<PlayerView>();
-	
+	private JTabbedPane tabbedPane = new JTabbedPane();
+	private JButton buttonStart;
 	private JFrame frame;
 	
-	public GameView(Game game) {
+	public GameView(Game game, GorillasServer server) {
 		this.game = game;
+		this.server = server;
 		
 		updatePlayers();
 	}
@@ -34,15 +44,17 @@ public class GameView implements Runnable, Observer {
         frame = new JFrame("Gorillaz server");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        draw(false);
+        draw();
+        createTabbedPane();
         //Display the window.
         frame.pack();
         frame.setVisible(true);
 	}
 	
-	private void draw(boolean clear) {
-		if (clear)
-			frame.removeAll();
+	private void draw() {
+		buttonStart = new JButton("Start");
+		frame.add(buttonStart);
+		buttonStart.addActionListener(this.server);
 		for (int i = 0; i < playerViews.size(); ++i) {
 			PlayerView playerView = playerViews.get(i);
 			JPanel panel = new JPanel();
@@ -51,9 +63,12 @@ public class GameView implements Runnable, Observer {
 			frame.getContentPane().add(panel);
 		}
 		
-        //Add the ubiquitous "Hello World" label.
-        JLabel label = new JLabel("Hello World");
-        frame.getContentPane().add(label);
+	}
+	
+	private void createTabbedPane() {
+		for (int i = 0; i < Game.STAGE_COUNT; ++i) {
+			
+		}
 	}
 	
 	private void updatePlayers() {
@@ -71,6 +86,10 @@ public class GameView implements Runnable, Observer {
 		// TODO Auto-generated method stub
 		updatePlayers();
 		System.out.println("game view was updated");
-		draw(true);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		
 	}
 }

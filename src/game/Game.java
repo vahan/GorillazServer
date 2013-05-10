@@ -13,7 +13,6 @@ public class Game extends Observable {
 	private ArrayList<Player> players = new ArrayList<Player>();
 	private int counter = -1;
 	
-	
 	public int getRound(int playerId) {
 		return players.get(playerId).getRound();
 	}
