@@ -12,18 +12,9 @@ import views.GameView;
 public class GorillasServer implements ActionListener{
 	
 	private Game game;
-	private GameView gameView;
-	
-	public static void main(String[] args) throws Exception
-	{
-		GorillasServer gServer = new GorillasServer(new Game());
-		javax.swing.SwingUtilities.invokeAndWait(gServer.gameView);
-		
-	}
 	
 	public GorillasServer(Game game) {
 		this.game = game;
-		this.gameView = new GameView(game, this);
 	}
 
 	@Override

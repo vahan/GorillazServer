@@ -26,9 +26,18 @@ public class GameView implements Runnable, Observer, ActionListener {
 	private JButton buttonStart;
 	private JFrame frame;
 	
-	public GameView(Game game, GorillasServer server) {
+
+	
+	public static void main(String[] args) throws Exception
+	{
+		javax.swing.SwingUtilities.invokeAndWait(new GameView(new Game()));
+		
+	}
+	
+	
+	public GameView(Game game) {
 		this.game = game;
-		this.server = server;
+		this.server = new GorillasServer(game);
 		
 		updatePlayers();
 	}
