@@ -31,16 +31,19 @@ public class Game extends Observable {
 	
 	public int addPlayer() {
 		int id = generateId();
-		players.add(id, new Player(id));
+		Player player = new Player(id);
+		players.add(id, player);
 		setChanged();
-		notifyObservers();
+		notifyObservers(player);
 		return id;
 	}
 	
-	public void start() {
-		for (int i = 0; i < players.size(); ++i) {
-			players.get(i).start();
-		}
+	public void start(int playerId) {
+		players.get(playerId).start();
+	}
+	
+	public boolean hasStarted() {
+		return players.size() > 0;
 	}
 	
 	public void goToNext(int _playerId) {

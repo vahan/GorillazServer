@@ -1,6 +1,8 @@
 package game;
 
+import java.util.Date;
 import java.util.Observable;
+
 
 public class Player extends Observable {
 	
@@ -12,11 +14,17 @@ public class Player extends Observable {
 	private int round;
 	private boolean submitted = false;
 	
+	private Date[][] responseReceivedTime = new Date[Game.STAGE_COUNT][Game.ROUND_COUNT];
+	
 	public Player(int id) {
 		this.id = id;
 		this.stage = -1;
 		this.round = -1;
 		this.submitted = false;
+	}
+	
+	public String getIp() {
+		return ip;
 	}
 	
 	public int getId() {
@@ -33,7 +41,7 @@ public class Player extends Observable {
 	
 	public void start() {
 		round = 0;
-		stage = 1;
+		stage = 0;
 		setChanged();
 		notifyObservers();
 	}
@@ -43,6 +51,9 @@ public class Player extends Observable {
 	}
 	
 	public void goToNext() {
+		if (round == 0) {
+			responseReceivedTime[stage][round] = new Date();
+		}
 		if (round < Game.ROUND_COUNT) {
 			round++;
 		} else {
@@ -61,6 +72,7 @@ public class Player extends Observable {
 	
 	public void setAngle(int stage, int round, double angle) {
 		angles[stage][round] = angle;
+		responseReceivedTime[stage][round] = new Date();
 		submitted = true;
 		setChanged();
 		notifyObservers();
@@ -73,6 +85,10 @@ public class Player extends Observable {
 	@Override
 	public String toString() {
 		return "Player: " + id;
+	}
+
+	public Date getResponseReceivedTime(int stage, int round) {
+		return responseReceivedTime[stage][round];
 	}
 	
 

@@ -7,7 +7,6 @@ import org.eclipse.jetty.server.Server;
 
 import game.Game;
 
-import views.GameView;
 
 public class GorillasServer implements ActionListener{
 	
