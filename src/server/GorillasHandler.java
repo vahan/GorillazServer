@@ -30,7 +30,7 @@ public class GorillasHandler extends AbstractHandler {
         
         handler = getHandler(request);
         if (handler == null) {
-        	response.getWriter().print("ERROR: handler is null!");
+        	response.getWriter().print("ERROR: Wrong request!");
         	return;
         }
         /*if (!_handler.validate()) {
@@ -52,6 +52,13 @@ public class GorillasHandler extends AbstractHandler {
 	
 	
 	private Handler getHandler(HttpServletRequest request) {
+		String paramId = request.getParameter("id");
+		if (paramId != null && !paramId.isEmpty()) {
+			int id = Integer.parseInt(paramId.trim());
+			if (!game.hasActivePlayer(id)) {
+				return null;
+			}
+		}
 		String type = request.getParameter("request");
 		if (type == null)
 			return null;

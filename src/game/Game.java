@@ -25,6 +25,16 @@ public class Game extends Observable {
 		return players.get(id);
 	}
 	
+	public ArrayList<Player> getActivePlayers() {
+		ArrayList<Player> activePlayers = new ArrayList<Player>();
+		for (Player player : players) {
+			if (!player.getIsActive())
+				continue;
+			activePlayers.add(player);
+		}
+		return activePlayers;
+	}
+	
 	public int playerCount() {
 		return players.size();
 	}
@@ -38,6 +48,23 @@ public class Game extends Observable {
 		return id;
 	}
 	
+	public boolean deactivatePlayer(Player player) {
+		if (players.contains(player)) {
+			player.setIsActive(false);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean hasActivePlayer(int id) {
+		for (Player player : players) {
+			if (player.getId() == id && player.getIsActive())
+				return true;
+		}
+		return false;
+	}
+	
 	public boolean hasStarted() {
 		return players.size() > 0;
 	}
@@ -49,8 +76,7 @@ public class Game extends Observable {
 	
 	public boolean isReady() {
 		boolean isReady = true;
-		for (int i = 0; i < players.size(); ++i) {
-			Player player = players.get(i);
+		for (Player player : getActivePlayers()) {
 			isReady = isReady && player.isReady();
 		}
 		return isReady;
@@ -59,9 +85,9 @@ public class Game extends Observable {
 	public double getMeanAngle(int stage, int round) {
 		System.out.println("players: " + Arrays.toString(players.toArray()));
 		double meanAngle = 0;
-		for (int i = 0; i < players.size(); ++i) {
-			double angle = players.get(i).getAngle(stage, round);
-			System.out.print(players.get(i).toString() + " - angle: " + angle + "\t");
+		for (Player player : getActivePlayers()) {
+			double angle = player.getAngle(stage, round);
+			System.out.print(player.toString() + " - angle: " + angle + "\t");
 			meanAngle += angle;
 		}
 		System.out.println();

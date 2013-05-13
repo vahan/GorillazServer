@@ -13,6 +13,7 @@ public class Player extends Observable {
 	private int stage;
 	private int round;
 	private boolean submitted = false;
+	private boolean isActive = true;
 	
 	private Date[][] responseReceivedTime = new Date[Game.STAGE_COUNT][Game.ROUND_COUNT + 1];
 	
@@ -48,6 +49,14 @@ public class Player extends Observable {
 	
 	public boolean isReady() {
 		return submitted;
+	}
+	
+	public boolean getIsActive() {
+		return isActive;
+	}
+	
+	public void setIsActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 	
 	public void goToNext() {

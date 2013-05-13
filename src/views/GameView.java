@@ -1,9 +1,15 @@
 package views;
 
+import java.awt.FlowLayout;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.*;
+
+import controllers.RemovePlayerController;
+import controllers.SelectPlayerController;
 
 import server.GorillasServer;
 
@@ -22,7 +28,11 @@ public class GameView extends JFrame implements Runnable, Observer {
 	
 	private JTabbedPane tabbedPane = new JTabbedPane();
 	private JButton buttonStartOrStop;
+	private JButton buttonRemove;
+	private JComboBox<String> comboPlayers;
+	private JPanel panelRemove = new JPanel();
 	
+	private Player selectedPlayer;
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -32,6 +42,7 @@ public class GameView extends JFrame implements Runnable, Observer {
 	
 	
 	public GameView(Game game) {
+		super("Gorillaz Server Controller");
 		this.game = game;
 		this.game.addObserver(this);
 		this.server = new GorillasServer(this.game);
@@ -55,16 +66,50 @@ public class GameView extends JFrame implements Runnable, Observer {
 	}
 	
 	private void draw() {
+		//Start/Stop button
 		buttonStartOrStop = new JButton("Start");
 		getContentPane().add(buttonStartOrStop);
 		buttonStartOrStop.addActionListener(this.server);
+		
+		//Tabbed pane for players' info in all stages
+		drawTabbedPane();
+		getContentPane().add(new JScrollPane(tabbedPane));
+		
+		//Removing players
+		panelRemove.setLayout(new FlowLayout());
+		buttonRemove = new JButton("Remove player: ");
+		buttonRemove.addActionListener(new RemovePlayerController(this));
+		panelRemove.add(buttonRemove);
+
+		drawPlayerCombo();
+		
+		getContentPane().add(panelRemove);
+	}
+	
+	public void drawTabbedPane() {
+		while (tabbedPane.getTabCount() > 0)
+			tabbedPane.removeTabAt(0);
 		tabbedPane.setAlignmentY(0);
 		for (int stage = 0; stage < Game.STAGE_COUNT; ++stage) {
 			StageView stageView = new StageView(stage);
 			this.stageViews[stage] = stageView;
-			tabbedPane.addTab("Stage " + stage, new JScrollPane(stageView));
+			tabbedPane.addTab("Stage " + stage, stageView);
 		}
-		getContentPane().add(tabbedPane);
+	}
+	
+	public void drawPlayerCombo() {
+		if (Arrays.asList(panelRemove.getComponents()).contains(comboPlayers)) {
+			panelRemove.remove(comboPlayers);
+		}
+		ArrayList<String> playerIds = new ArrayList<String>();
+		for (Player player : game.getActivePlayers()) {
+			playerIds.add(Integer.toString(player.getId()));
+		}
+		comboPlayers = new JComboBox<String>(playerIds.toArray(new String[playerIds.size()]));
+		comboPlayers.setSelectedIndex(-1);
+		comboPlayers.addActionListener(new SelectPlayerController(this));
+		panelRemove.add(comboPlayers);
+		panelRemove.updateUI();
 	}
 
 	@Override
@@ -79,6 +124,7 @@ public class GameView extends JFrame implements Runnable, Observer {
 		for (int stage = 0; stage < Game.STAGE_COUNT; ++stage) {
 			stageViews[stage].addPlayerView(player);
 		}
+		comboPlayers.addItem(Integer.toString(player.getId()));
 	}
 	
 	private void updateFromServer(boolean isStarted) {
@@ -86,6 +132,19 @@ public class GameView extends JFrame implements Runnable, Observer {
 			buttonStartOrStop.setText("Stop");
 		} else {
 			buttonStartOrStop.setText("Start");
+		}
+	}
+
+	public Player getSelectedPlayer() {
+		return selectedPlayer;
+	}
+	
+	public void setSelectedPlayer(String id) {
+		for (Player player : game.getActivePlayers()) {
+			if (player.getId() == Integer.parseInt(id)) {
+				selectedPlayer = player;
+				return;
+			}
 		}
 	}
 
