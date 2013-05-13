@@ -38,16 +38,13 @@ public class Game extends Observable {
 		return id;
 	}
 	
-	public void start(int playerId) {
-		players.get(playerId).start();
-	}
-	
 	public boolean hasStarted() {
 		return players.size() > 0;
 	}
 	
-	public void goToNext(int _playerId) {
-		players.get(_playerId).goToNext();
+	public void goToNext(int playerId) {
+		players.get(playerId).goToNext();
+		notifyObservers(players.get(playerId));
 	}
 	
 	public boolean isReady() {

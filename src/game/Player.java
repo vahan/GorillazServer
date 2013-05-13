@@ -14,7 +14,7 @@ public class Player extends Observable {
 	private int round;
 	private boolean submitted = false;
 	
-	private Date[][] responseReceivedTime = new Date[Game.STAGE_COUNT][Game.ROUND_COUNT];
+	private Date[][] responseReceivedTime = new Date[Game.STAGE_COUNT][Game.ROUND_COUNT + 1];
 	
 	public Player(int id) {
 		this.id = id;
