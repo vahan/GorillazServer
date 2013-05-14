@@ -18,8 +18,13 @@ public class MeanHandler extends Handler {
 		int stage = Integer.parseInt(request.getParameter("stage"));
 		int round = Integer.parseInt(request.getParameter("round"));
 		int id = Integer.parseInt(request.getParameter("id").trim());
-		String mean = StringUtils.join(game.getAllMeanAngles(), " ");
-		GameView.LOGGER.log("Player " + id + "requested the mean for stage " + stage + " round " + round + " and recieved " + mean);
+		double[] means = game.getAllMeanAngles();
+		String mean = "";
+		for (double m : means) {
+			mean += m + " ";
+		}
+		mean = mean.trim();
+		GameView.LOGGER.log("Player " + id + "requested the mean for stage " + stage + " and round " + round + "; sending: " + mean);
 		return mean;
 	}
 

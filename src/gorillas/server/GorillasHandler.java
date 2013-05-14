@@ -9,7 +9,6 @@ import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import gorillas.Game;
-import gorillas.views.GameView;
 
 
 public class GorillasHandler extends AbstractHandler {

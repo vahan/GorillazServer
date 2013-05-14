@@ -11,10 +11,6 @@ import gorillas.Player;
 
 public class PlayerViewData extends Observable implements Observer {
 	
-	/**
-	 * Generated serial version ID
-	 */
-	private static final long serialVersionUID = -7293744326745031617L;
 	private Player player;
 	private int stage;
 	private List<String> data = new ArrayList<String>();

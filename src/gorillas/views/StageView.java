@@ -53,18 +53,16 @@ public class StageView extends JTable implements Observer {
 		model = ((DefaultTableModel) getModel());
 		model.removeRow(row);
 		model.insertRow(row, playerView.getData());
-		//model.fireTableRowsUpdated(row, row);
+		model.fireTableRowsInserted(row, row);
 	}
 	
 	public void addPlayerView(Player player) {
 		PlayerViewData playerView = new PlayerViewData(player, stage, getRowCount());
 		playerView.addObserver(this);
-		//add(playerView);
 		Object[] data = playerView.getData();
 		model = ((DefaultTableModel) getModel());
 		model.addRow(data);
-		//model.fireTableRowsInserted(0, model.getRowCount() - 1);
-		//updateUI();
+		model.fireTableRowsInserted(0, model.getRowCount() - 1);
 	}
 
 	@Override
@@ -73,7 +71,6 @@ public class StageView extends JTable implements Observer {
 		if (playerView == null)
 			return;
 		updatePlayerView(playerView);
-		//updateUI();
 	}
 	
 

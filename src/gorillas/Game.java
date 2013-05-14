@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import gorillas.views.GameView;
 
 public class Game extends Observable {
@@ -116,11 +118,12 @@ public class Game extends Observable {
 	}
 	
 	public double[] getAllMeanAngles() {
-		double[] means = new double[round ];
+		double[] means = new double[round];
 		
 		for (int r = 0; r < round; ++r) {
 			means[r] = getMeanAngle(stage, r + 1);
 		}
+		ArrayUtils.reverse(means); //To show the last mean first
 		GameView.LOGGER.log("All means: " + Arrays.toString(means));
 		return means;
 	}
