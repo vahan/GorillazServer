@@ -19,9 +19,9 @@ public class AuthenticationHandler extends Handler {
         	return "-1";
         }
         game.getPlayer(id).start();
-        String idStr = (new Integer(id)).toString();
+        String response = (new Integer(id)).toString() + ":" + game.getWind();
 		GameView.LOGGER.log("A new player with id " + id + " was authenticated");
-		return idStr;
+		return response;
 	}
 
 }

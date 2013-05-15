@@ -16,9 +16,17 @@ public class Game extends Observable {
 	
 	private ArrayList<Player> players = new ArrayList<Player>();
 	private int counter = -1;
-	
-	private int stage = -1;
+	private int stage = 0;
 	private int round = -1;
+	private double[] winds = new double[STAGE_COUNT];
+	
+	private static double minWind = -5;
+	private static double maxWind = 5;
+	
+	public Game() {
+		super();
+		winds[0] = generateWind();
+	}
 	
 	public int getStage() {
 		return stage;
@@ -37,6 +45,10 @@ public class Game extends Observable {
 	}
 	public Player getPlayer(int id) {
 		return players.get(id);
+	}
+	
+	public double getWind() {
+		return this.winds[stage];
 	}
 	
 	public ArrayList<Player> getActivePlayers() {
@@ -88,6 +100,7 @@ public class Game extends Observable {
 	public void goToNext() {
 		if (stage < 0 && round < 0) {
 			stage++;
+			winds[stage] = generateWind();
 		}
 		if (round < Game.ROUND_COUNT) {
 			round++;
@@ -95,6 +108,7 @@ public class Game extends Observable {
 			round = 0;
 			if (stage < Game.STAGE_COUNT) {
 				stage++;
+				winds[stage] = generateWind();
 			} else {
 				Game.finish();
 			}
@@ -139,6 +153,12 @@ public class Game extends Observable {
 		//TODO: END THE GAME
 		
 		GameView.LOGGER.log("Game is over");
+	}
+	
+	private double generateWind() {
+		double wind = minWind + (int)(Math.random() * ((maxWind - minWind) + 1));
+		GameView.LOGGER.log("wind: " + wind);
+		return wind;
 	}
 	
 	private int generateId() {
