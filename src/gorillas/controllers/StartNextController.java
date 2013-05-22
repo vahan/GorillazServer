@@ -27,7 +27,7 @@ public class StartNextController implements ActionListener {
 			gameView.getButtonNextRound().setEnabled(false);
 		}
 		if (!gameView.getGame().getIsOver()) {
-			gameView.getButtonNextRound().setText("Start Round " + gameView.getGame().getNextRound());
+			gameView.getButtonNextRound().setText("End Round " + gameView.getGame().getNextRound());
 		}
 		
 		gameView.getButtonNextStage().setEnabled(gameView.getGame().getRound() == Game.ROUND_COUNT && !gameView.getGame().getIsOver());

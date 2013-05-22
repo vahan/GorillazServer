@@ -82,7 +82,7 @@ public class GameView extends JFrame implements Runnable, Observer {
 		panelButtons.add(buttonNextStage);
 		buttonNextStage.addActionListener(new StartNextController(this));
 		//Next Round button
-		buttonNextRound = new JButton("Start Round 0");
+		buttonNextRound = new JButton("End Round 0");
 		buttonNextRound.setName("Start Round");
 		buttonNextRound.setEnabled(false);
 		panelButtons.add(buttonNextRound);
