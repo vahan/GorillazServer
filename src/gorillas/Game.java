@@ -26,7 +26,9 @@ public class Game extends Observable {
 	
 	public Game() {
 		super();
-		winds[0] = generateWind();
+		for (int stage = 0; stage < STAGE_COUNT; ++stage) {
+			winds[stage] = generateWind();
+		}
 	}
 	
 	public void reset() {
@@ -59,6 +61,10 @@ public class Game extends Observable {
 	}
 	
 	public double getWind() {
+		return this.winds[stage];
+	}
+	
+	public double getWind(int stage) {
 		return this.winds[stage];
 	}
 	
@@ -115,15 +121,17 @@ public class Game extends Observable {
 	public void goToNext() {
 		if (stage < 0 && round < 0) {
 			stage++;
-			winds[stage] = generateWind();
+			//winds[stage] = generateWind();
 		}
 		if (round < Game.ROUND_COUNT) {
 			round++;
 		} else {
+			if (round == Game.ROUND_COUNT) {
+				//winds[stage + 1] = generateWind();
+			}
 			round = 0;
 			if (stage < Game.STAGE_COUNT - 1) {
 				stage++;
-				winds[stage] = generateWind();
 			} else {
 				finish();
 			}
@@ -177,7 +185,6 @@ public class Game extends Observable {
 	
 	private double generateWind() {
 		double wind = MIN_WIND + (int)(Math.random() * ((MAX_WIND - MIN_WIND) + 1));
-		GameView.LOGGER.log("wind: " + wind);
 		return wind;
 	}
 	

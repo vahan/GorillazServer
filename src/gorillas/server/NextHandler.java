@@ -18,10 +18,12 @@ public class NextHandler extends Handler {
 		if (isReady) {
 			game.getPlayer(id).goToNext();
 		}
-		String response = isReady ? game.getPlayer(id).getStage() + ":" + game.getPlayer(id).getRound() + ":" + game.getWind() : "NO";
+		int stage = game.getPlayer(id).getStage();
+		double wind = game.getWind(stage);
+		String response = isReady ? stage + ":" + game.getPlayer(id).getRound() + ":" + wind : "NO";
 		if (isReady) {
 			GameView.LOGGER.log("Player " + id + "moved to stage " + stage + " round " + round);
-			GameView.LOGGER.log("Wind: " + game.getWind());
+			GameView.LOGGER.log("Wind: " + wind);
 		}
 		return response;
 	}
