@@ -26,10 +26,12 @@ public class StartNextController implements ActionListener {
 			gameView.getButtonNextStage().setText("Finish");
 			gameView.getButtonNextRound().setEnabled(false);
 		}
-		gameView.getButtonNextRound().setText("Start Round " + gameView.getGame().getNextRound());
+		if (!gameView.getGame().getIsOver()) {
+			gameView.getButtonNextRound().setText("Start Round " + gameView.getGame().getNextRound());
+		}
 		
-		gameView.getButtonNextRound().setEnabled(gameView.getGame().getRound() != Game.ROUND_COUNT);
-		gameView.getButtonNextStage().setEnabled(gameView.getGame().getRound() == Game.ROUND_COUNT);
+		gameView.getButtonNextStage().setEnabled(gameView.getGame().getRound() == Game.ROUND_COUNT && !gameView.getGame().getIsOver());
+		gameView.getButtonNextRound().setEnabled(gameView.getGame().getRound() != Game.ROUND_COUNT && !gameView.getGame().getIsOver());
 	}
 
 }

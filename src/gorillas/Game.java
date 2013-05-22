@@ -22,7 +22,7 @@ public class Game extends Observable {
 	private int stage = 0;
 	private int round = -1;
 	private double[] winds = new double[STAGE_COUNT];
-	
+	private boolean isOver = false;
 	
 	public Game() {
 		super();
@@ -121,14 +121,15 @@ public class Game extends Observable {
 			round++;
 		} else {
 			round = 0;
-			if (stage < Game.STAGE_COUNT) {
+			if (stage < Game.STAGE_COUNT - 1) {
 				stage++;
 				winds[stage] = generateWind();
 			} else {
-				Game.finish();
+				finish();
 			}
 		}
-		GameView.LOGGER.log("New stage: " + stage + "\t new round: " + round);
+		if (!isOver)
+			GameView.LOGGER.log("New stage: " + stage + "\t new round: " + round);
 	}
 	
 	public boolean isReady(int stage, int round) {
@@ -164,10 +165,14 @@ public class Game extends Observable {
 		return saver.save();
 	}
 	
-	public static void finish() {
+	public void finish() {
 		//TODO: END THE GAME
-		
+		isOver = true;
 		GameView.LOGGER.log("Game is over");
+	}
+	
+	public boolean getIsOver() {
+		return isOver;
 	}
 	
 	private double generateWind() {
