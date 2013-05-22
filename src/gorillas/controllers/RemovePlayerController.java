@@ -16,9 +16,7 @@ public class RemovePlayerController implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		gameView.getGame().deactivatePlayer(gameView.getSelectedPlayer());
-		gameView.drawTabbedPane();
-		gameView.drawPlayerCombo();
+		gameView.removePlayer(gameView.getSelectedPlayer());
 	}
 
 }

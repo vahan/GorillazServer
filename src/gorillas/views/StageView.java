@@ -10,7 +10,11 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 public class StageView extends JTable implements Observer {
 	
@@ -30,8 +34,6 @@ public class StageView extends JTable implements Observer {
 		super();
 		this.stage = stage;
 		
-		//model = ((DefaultTableModel) getModel());
-		//setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		init();
 		
 		for (Player player : players) {
@@ -45,7 +47,15 @@ public class StageView extends JTable implements Observer {
 			columnNames.add("Mean in Round " + i + "Received");
 		}
 		model = new DefaultTableModel(columnNames.toArray(new String[columnNames.size()]), 0);
-		setModel(model);
+		setModel(model); 
+		/*TableColumnModel tcm = getTableHeader().getColumnModel();
+		for(int colInd = 0, colCount = tcm.getColumnCount(); colInd < colCount; ++colInd) {
+			TableColumn tc = tcm.getColumn(colInd);
+			tc.setHeaderValue(columnNames.get(colInd));
+		}
+		model.fireTableStructureChanged();
+		model.fireTableDataChanged();
+		repaint();*/
 	}
 	
 	private void updatePlayerView(PlayerViewData playerView) {

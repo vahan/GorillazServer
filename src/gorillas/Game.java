@@ -14,18 +14,29 @@ public class Game extends Observable {
 	public static final int ROUND_COUNT = 5;
 	public static final int PLAYER_COUNT = 10;
 	
+	private static final double MIN_WIND = -5;
+	private static final double MAX_WIND = 5;
+	
 	private ArrayList<Player> players = new ArrayList<Player>();
 	private int counter = -1;
 	private int stage = 0;
 	private int round = -1;
 	private double[] winds = new double[STAGE_COUNT];
 	
-	private static double minWind = -5;
-	private static double maxWind = 5;
 	
 	public Game() {
 		super();
 		winds[0] = generateWind();
+	}
+	
+	public void reset() {
+		counter = -1;
+		stage = 0;
+		round = -1;
+		winds = new double[STAGE_COUNT];
+		players = new ArrayList<Player>();
+		setChanged();
+		notifyObservers(null);
 	}
 	
 	public int getStage() {
@@ -59,6 +70,10 @@ public class Game extends Observable {
 			activePlayers.add(player);
 		}
 		return activePlayers;
+	}
+	
+	public ArrayList<Player> getAllPlayers() {
+		return new ArrayList<Player>(players);
 	}
 	
 	public int playerCount() {
@@ -143,7 +158,7 @@ public class Game extends Observable {
 	}
 	
 	public boolean save() {
-		XMLSaver saver = new XMLSaver(this);
+		TextSaver saver = new TextSaver(this);
 		
 		GameView.LOGGER.log("Game was successfully saved");
 		return saver.save();
@@ -156,7 +171,7 @@ public class Game extends Observable {
 	}
 	
 	private double generateWind() {
-		double wind = minWind + (int)(Math.random() * ((maxWind - minWind) + 1));
+		double wind = MIN_WIND + (int)(Math.random() * ((MAX_WIND - MIN_WIND) + 1));
 		GameView.LOGGER.log("wind: " + wind);
 		return wind;
 	}
