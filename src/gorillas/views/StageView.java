@@ -10,11 +10,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 
 public class StageView extends JTable implements Observer {
 	
@@ -29,6 +25,7 @@ public class StageView extends JTable implements Observer {
 																			"Done Insertion"*/
 																			));
 	private DefaultTableModel model;
+	private List<PlayerViewData> playerViewDatas = new ArrayList<PlayerViewData>();
 	
 	public StageView(int stage, List<Player> players) {
 		super();
@@ -39,23 +36,16 @@ public class StageView extends JTable implements Observer {
 		for (Player player : players) {
 			addPlayerView(player);
 		}
+		setAutoResizeMode(AUTO_RESIZE_OFF);
 	}
 	
 	private void init() {
-		for (int i = 0; i < Game.ROUND_COUNT; ++i) {
+		for (int i = 0; i <= Game.ROUND_COUNT; ++i) {
 			columnNames.add("Angle in Round " + i);
-			columnNames.add("Mean in Round " + i + "Received");
+			columnNames.add("Mean in Round " + i + " Received");
 		}
 		model = new DefaultTableModel(columnNames.toArray(new String[columnNames.size()]), 0);
 		setModel(model); 
-		/*TableColumnModel tcm = getTableHeader().getColumnModel();
-		for(int colInd = 0, colCount = tcm.getColumnCount(); colInd < colCount; ++colInd) {
-			TableColumn tc = tcm.getColumn(colInd);
-			tc.setHeaderValue(columnNames.get(colInd));
-		}
-		model.fireTableStructureChanged();
-		model.fireTableDataChanged();
-		repaint();*/
 	}
 	
 	private void updatePlayerView(PlayerViewData playerView) {
@@ -67,7 +57,9 @@ public class StageView extends JTable implements Observer {
 	}
 	
 	public void addPlayerView(Player player) {
-		PlayerViewData playerView = new PlayerViewData(player, stage, getRowCount());
+		PlayerViewData plViewData = new PlayerViewData(player, stage, getRowCount());
+		playerViewDatas.add(plViewData);
+		PlayerViewData playerView = plViewData;
 		playerView.addObserver(this);
 		Object[] data = playerView.getData();
 		model = ((DefaultTableModel) getModel());

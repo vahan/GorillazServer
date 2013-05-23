@@ -11,7 +11,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 
 import gorillas.Game;
 import gorillas.Player;
@@ -133,7 +132,9 @@ public class GameView extends JFrame implements Runnable, Observer {
 		for (int stage = 0; stage < Game.STAGE_COUNT; ++stage) {
 			StageView stageView = new StageView(stage, game.getActivePlayers());
 			this.stageViews[stage] = stageView;
-			JScrollPane scrolledPaneTabbed = new JScrollPane(stageView);
+			JScrollPane scrolledPaneTabbed = new JScrollPane(stageView,
+												JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+												JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 			scrolledPaneTabbed.setPreferredSize(new Dimension(this.getWidth(), 200));
 			tabbedPane.addTab("Stage " + stage, scrolledPaneTabbed);
 		}

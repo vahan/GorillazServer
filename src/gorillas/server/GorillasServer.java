@@ -13,13 +13,15 @@ public class GorillasServer extends Observable implements ActionListener {
 	
 	private Game game;
 	private Server server;
+	private GorillasHandler handler;
 	
 	public GorillasServer(Game game) {
 		this.game = game;
+		handler = new GorillasHandler(this.game);
 		
 		server = new Server(8070);
 		server.setAttribute("allowedOrigins", "*");
-		server.setHandler(new GorillasHandler(this.game));
+		server.setHandler(handler);
 	}
 
 	@Override
