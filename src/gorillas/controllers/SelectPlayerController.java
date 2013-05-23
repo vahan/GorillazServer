@@ -7,6 +7,11 @@ import javax.swing.JComboBox;
 
 import gorillas.views.GameView;
 
+/**
+ * Action listener for select player combobox
+ * @author vahan
+ *
+ */
 public class SelectPlayerController implements ActionListener {
 	
 	private GameView gameView;
@@ -17,8 +22,10 @@ public class SelectPlayerController implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-        JComboBox<String> cb = (JComboBox<String>) e.getSource();
-        String selectedId = (String)cb.getSelectedItem();
+		JComboBox<String> cb = (JComboBox<String>) e.getSource();
+		String selectedId = (String) cb.getSelectedItem();
+		if (selectedId == null)
+			return;
 		gameView.setSelectedPlayer(selectedId);
 	}
 

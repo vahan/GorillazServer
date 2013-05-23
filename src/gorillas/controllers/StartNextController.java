@@ -6,6 +6,11 @@ import java.awt.event.ActionListener;
 import gorillas.Game;
 import gorillas.views.GameView;
 
+/**
+ * Action listener for Next Stage and Next Round buttons
+ * @author vahan
+ *
+ */
 public class StartNextController implements ActionListener {
 	
 	private GameView gameView;

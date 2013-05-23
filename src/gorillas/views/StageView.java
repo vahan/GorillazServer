@@ -12,6 +12,12 @@ import java.util.Observer;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * Show the stage info as a table
+ * Observes PlayerViewDatas
+ * @author vahan
+ *
+ */
 public class StageView extends JTable implements Observer {
 	
 	private int stage;
@@ -24,6 +30,9 @@ public class StageView extends JTable implements Observer {
 																			"ID"/*,
 																			"Done Insertion"*/
 																			));
+	/**
+	 * Contains the actual data to be shown on the table
+	 */
 	private DefaultTableModel model;
 	private List<PlayerViewData> playerViewDatas = new ArrayList<PlayerViewData>();
 	
@@ -67,6 +76,9 @@ public class StageView extends JTable implements Observer {
 		model.fireTableRowsInserted(0, model.getRowCount() - 1);
 	}
 
+	/**
+	 * Updates the according player view whenever a change notification is received from PlayerViewData
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		PlayerViewData playerView = (PlayerViewData) o;

@@ -18,6 +18,13 @@ import gorillas.TextSaver;
 import gorillas.controllers.*;
 import gorillas.server.GorillasServer;
 
+/**
+ * JFrame GUI element for the game. Shows the entire window,
+ * including start/stop, next and remove buttons; the main tabbed pain of users' data; and the log panel
+ * Observes Game
+ * @author vahan
+ *
+ */
 public class GameView extends JFrame implements Runnable, Observer {
 	
 	public static final LogPanel LOGGER = new LogPanel();
@@ -30,10 +37,11 @@ public class GameView extends JFrame implements Runnable, Observer {
 	private GorillasServer server;
 	private StageView[] stageViews = new StageView[Game.STAGE_COUNT];
 	
-	private JTabbedPane tabbedPane = new JTabbedPane();
 	private JPanel panelButtons = new JPanel();
-	private JPanel panelRemove = new JPanel();
-	private JPanel panelSave = new JPanel();
+	private JTabbedPane tabbedPane = new JTabbedPane();
+	private JScrollPane scrollPaneLogger;
+	private JPanel panelRemove;
+	private JPanel panelSave;
 	private JButton buttonStartOrStopServer;
 	private JButton buttonNextRound;
 	private JButton buttonNextStage;
@@ -55,6 +63,28 @@ public class GameView extends JFrame implements Runnable, Observer {
 		return game;
 	}
 	
+	public Player getSelectedPlayer() {
+		return selectedPlayer;
+	}
+
+	public JButton getButtonNextStage() {
+		return this.buttonNextStage;
+	}
+	
+	public JButton getButtonNextRound() {
+		return this.buttonNextRound;
+	}
+	
+	public void setSelectedPlayer(String id) {
+		for (Player player : game.getActivePlayers()) {
+			if (player.getId() == Integer.parseInt(id)) {
+				selectedPlayer = player;
+				return;
+			}
+		}
+	}
+	
+	
 	@Override
 	public void run() {
         setTitle("Gorillaz");
@@ -67,8 +97,74 @@ public class GameView extends JFrame implements Runnable, Observer {
         setVisible(true);
 	}
 	
+	/**
+	 * Updates the view whenever a change (added/removed player) is notified from the model
+	 * @param o		The sender object: either Game or GorillasServer.
+	 * @param arg	The changed player. If null all players are deactivated.
+	 * 				if o is a Game, then contains the added player
+	 * 				if o is a GorillasServer, then contains a boolean value indicating whether server was started
+	 */
+	@Override
+	public void update(Observable o, Object arg) {
+		if (arg == null) {
+			for (Player player : game.getActivePlayers()) {
+				removePlayer(player);
+			}
+			buttonNextStage.setText("Start Stage 0");
+			buttonNextRound.setText("Start Round 0");
+			return;
+		}
+		if (o instanceof Game)
+			updateFromGame((Player)arg);
+		else if (o instanceof GorillasServer)
+			updateFromServer((boolean) arg);
+	}
+	
 	private void draw() {
 		//buttons
+		drawButtons();
+		getContentPane().add(panelButtons);
+		
+		//Tabbed pane for players' info in all stages
+		drawTabbedPane();
+		getContentPane().add(tabbedPane);
+		
+		//Logger
+		drawLogPanel();
+		getContentPane().add(scrollPaneLogger);
+		
+		//Removing players
+		panelRemove = new JPanel(new FlowLayout());
+		//Remove button
+		buttonRemove = new JButton("Remove player: ");
+		buttonRemove.addActionListener(new RemovePlayerController(this));
+		panelRemove.add(buttonRemove);
+		//Combo
+		comboPlayers = new JComboBox<String>();
+		drawComboPlayers();
+		comboPlayers.addActionListener(new SelectPlayerController(this));
+		panelRemove.add(comboPlayers);
+		getContentPane().add(panelRemove);
+		
+		//Save data
+		panelSave = new JPanel();
+		panelRemove.add(panelSave, BorderLayout.EAST);
+		buttonSave = new JButton("Save");
+		buttonSave.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				TextSaver saver = new TextSaver(game);
+				if (saver.save()) {
+					JOptionPane.showMessageDialog(GameView.this, "The data was successfully saved");
+				} else {
+					JOptionPane.showMessageDialog(GameView.this, "An error accured. Could not save");
+				}
+			}
+		});
+		panelSave.add(buttonSave);
+	}
+	
+	private void drawButtons() {
 		panelButtons.setLayout(new FlowLayout());
 		//Start/stop button
 		buttonStartOrStopServer = new JButton("Start the Server");
@@ -87,45 +183,9 @@ public class GameView extends JFrame implements Runnable, Observer {
 		panelButtons.add(buttonNextRound);
 		buttonNextRound.addActionListener(new StartNextController(this));
 		
-		getContentPane().add(panelButtons);
-		
-		//Tabbed pane for players' info in all stages
-		drawTabbedPane();
-		
-		//Removing players
-		panelRemove.setLayout(new FlowLayout());
-		buttonRemove = new JButton("Remove player: ");
-		buttonRemove.addActionListener(new RemovePlayerController(this));
-		panelRemove.add(buttonRemove);
-		
-		//Logger
-		JScrollPane scrollPaneLogger = new JScrollPane(LOGGER);
-		scrollPaneLogger.setPreferredSize(new Dimension(this.getWidth(), 100));
-		getContentPane().add(scrollPaneLogger);
-
-		drawPlayerCombo();
-
-		//Save data
-		panelRemove.add(panelSave, BorderLayout.EAST);
-		buttonSave = new JButton("Save");
-		buttonSave.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				TextSaver saver = new TextSaver(game);
-				if (saver.save()) {
-					JOptionPane.showMessageDialog(GameView.this, "The data was successfully saved");
-				} else {
-					JOptionPane.showMessageDialog(GameView.this, "An error accured. Could not save");
-				}
-			}
-		});
-		panelSave.add(buttonSave);
-		
-		getContentPane().add(panelRemove);
 	}
 	
-	public void drawTabbedPane() {
+	private void drawTabbedPane() {
 		while (tabbedPane.getTabCount() > 0)
 			tabbedPane.removeTabAt(0);
 		tabbedPane.setAlignmentY(0);
@@ -138,40 +198,31 @@ public class GameView extends JFrame implements Runnable, Observer {
 			scrolledPaneTabbed.setPreferredSize(new Dimension(this.getWidth(), 200));
 			tabbedPane.addTab("Stage " + stage, scrolledPaneTabbed);
 		}
-		getContentPane().add(tabbedPane);
 	}
 	
-	public void drawPlayerCombo() {
-		if (Arrays.asList(panelRemove.getComponents()).contains(comboPlayers)) {
-			panelRemove.remove(comboPlayers);
+	private void drawLogPanel() {
+		scrollPaneLogger = new JScrollPane(LOGGER);
+		scrollPaneLogger.setPreferredSize(new Dimension(this.getWidth(), 100));
+	}
+	
+	private void drawComboPlayers() {
+		//Combo
+		while (comboPlayers.getItemCount() > 0) {
+			comboPlayers.removeItemAt(0);
+			comboPlayers.setSelectedIndex(-1);
 		}
-		ArrayList<String> playerIds = new ArrayList<String>();
 		for (Player player : game.getActivePlayers()) {
-			playerIds.add(Integer.toString(player.getId()));
+			comboPlayers.addItem(Integer.toString(player.getId()));
 		}
-		comboPlayers = new JComboBox<String>(playerIds.toArray(new String[playerIds.size()]));
 		comboPlayers.setSelectedIndex(-1);
-		comboPlayers.addActionListener(new SelectPlayerController(this));
-		panelRemove.add(comboPlayers);
+		comboPlayers.updateUI();
 		panelRemove.updateUI();
 	}
-	
-	@Override
-	public void update(Observable o, Object arg) {
-		if (arg == null) {
-			for (Player player : game.getActivePlayers()) {
-				removePlayer(player);
-			}
-			buttonNextStage.setText("Start Stage 0");
-			buttonNextRound.setText("Start Round 0");
-			return;
-		}
-		if (o instanceof Game)
-			updateFromGame((Player)arg);
-		else if (o instanceof GorillasServer)
-			updateFromServer((boolean) arg);
-	}
-	
+	/**
+	 * Called for the cases, when the change notification is sent from Game,
+	 * typically when a player was added or deleted
+	 * @param player	the added/removed player
+	 */
 	private void updateFromGame(Player player) {
 		for (int stage = 0; stage < Game.STAGE_COUNT; ++stage) {
 			stageViews[stage].addPlayerView(player);
@@ -179,6 +230,11 @@ public class GameView extends JFrame implements Runnable, Observer {
 		comboPlayers.addItem(Integer.toString(player.getId()));
 	}
 	
+	/**
+	 * Called when a change notification is sent from Server,
+	 * typically when it has started/stopped
+	 * @param isStarted
+	 */
 	private void updateFromServer(boolean isStarted) {
 		if (isStarted) {
 			buttonStartOrStopServer.setText("Stop the Server");
@@ -192,31 +248,15 @@ public class GameView extends JFrame implements Runnable, Observer {
 		buttonNextRound.setEnabled(false);
 	}
 	
-	public Player getSelectedPlayer() {
-		return selectedPlayer;
-	}
-	
-	public void setSelectedPlayer(String id) {
-		for (Player player : game.getActivePlayers()) {
-			if (player.getId() == Integer.parseInt(id)) {
-				selectedPlayer = player;
-				return;
-			}
-		}
-	}
-
-	public JButton getButtonNextStage() {
-		return this.buttonNextStage;
-	}
-	
-	public JButton getButtonNextRound() {
-		return this.buttonNextRound;
-	}
-	
+	/**
+	 * Deactivates the given player. Does NOT remove it.
+	 * @param player
+	 */
 	public void removePlayer(Player player) {
-		getGame().deactivatePlayer(getSelectedPlayer());
+		game.deactivatePlayer(getSelectedPlayer());
 		drawTabbedPane();
-		drawPlayerCombo();
+		drawComboPlayers();
 	}
+	
 
 }

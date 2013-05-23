@@ -5,6 +5,12 @@ import java.awt.event.ActionListener;
 
 import gorillas.views.GameView;
 
+/**
+ * Action listener for the remove player button
+ * @author vahan
+ *
+ */
+
 public class RemovePlayerController implements ActionListener {
 	
 	private GameView gameView;

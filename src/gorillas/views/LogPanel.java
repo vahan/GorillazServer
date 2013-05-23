@@ -6,6 +6,11 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * The log panel printing info to the GUI
+ * @author vahan
+ *
+ */
 public class LogPanel extends JPanel {
 	
 	/**

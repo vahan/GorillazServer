@@ -8,7 +8,12 @@ import org.eclipse.jetty.server.Server;
 
 import gorillas.Game;
 
-
+/**
+ * Custom jetty server
+ * Also action listener of Start/Stop Server buttons
+ * @author vahan
+ *
+ */
 public class GorillasServer extends Observable implements ActionListener {
 	
 	private Game game;
@@ -20,7 +25,7 @@ public class GorillasServer extends Observable implements ActionListener {
 		handler = new GorillasHandler(this.game);
 		
 		server = new Server(8070);
-		server.setAttribute("allowedOrigins", "*");
+		server.setAttribute("allowedOrigins", "*"); //Allow cross-server requests
 		server.setHandler(handler);
 	}
 

@@ -8,6 +8,11 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import gorillas.views.GameView;
 
+/**
+ * Responsible for the overall game mechanics, contains the game data
+ * @author vahan
+ *
+ */
 public class Game extends Observable {
 	
 	public static final int STAGE_COUNT = 8;
@@ -18,6 +23,9 @@ public class Game extends Observable {
 	private static final double MAX_WIND = 5;
 	
 	private ArrayList<Player> players = new ArrayList<Player>();
+	/**
+	 * Used to generate unique IDs
+	 */
 	private int counter = -1;
 	private int stage = 0;
 	private int round = -1;
@@ -29,16 +37,6 @@ public class Game extends Observable {
 		for (int stage = 0; stage < STAGE_COUNT; ++stage) {
 			winds[stage] = generateWind();
 		}
-	}
-	
-	public void reset() {
-		counter = -1;
-		stage = 0;
-		round = -1;
-		winds = new double[STAGE_COUNT];
-		players = new ArrayList<Player>();
-		setChanged();
-		notifyObservers(null);
 	}
 	
 	public int getStage() {
@@ -68,6 +66,10 @@ public class Game extends Observable {
 		return this.winds[stage];
 	}
 	
+	/**
+	 * Gives a list of players currently in the game
+	 * @return
+	 */
 	public ArrayList<Player> getActivePlayers() {
 		ArrayList<Player> activePlayers = new ArrayList<Player>();
 		for (Player player : players) {
@@ -84,6 +86,28 @@ public class Game extends Observable {
 	
 	public int playerCount() {
 		return players.size();
+	}
+	
+	public boolean hasActivePlayer(int id) {
+		for (Player player : players) {
+			if (player.getId() == id && player.getIsActive())
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean hasStarted() {
+		return players.size() > 0;
+	}
+	
+	public void reset() {
+		counter = -1;
+		stage = 0;
+		round = -1;
+		winds = new double[STAGE_COUNT];
+		players = new ArrayList<Player>();
+		setChanged();
+		notifyObservers(null);
 	}
 	
 	public int addPlayer() {
@@ -106,18 +130,9 @@ public class Game extends Observable {
 		}
 	}
 	
-	public boolean hasActivePlayer(int id) {
-		for (Player player : players) {
-			if (player.getId() == id && player.getIsActive())
-				return true;
-		}
-		return false;
-	}
-	
-	public boolean hasStarted() {
-		return players.size() > 0;
-	}
-	
+	/**
+	 * Sets the game to the next round/stage 
+	 */
 	public void goToNext() {
 		if (stage < 0 && round < 0) {
 			stage++;
@@ -140,6 +155,12 @@ public class Game extends Observable {
 			GameView.LOGGER.log("New stage: " + stage + "\t new round: " + round);
 	}
 	
+	/**
+	 * Checks if the game is in the given stage and round
+	 * @param stage
+	 * @param round
+	 * @return
+	 */
 	public boolean isReady(int stage, int round) {
 		return this.stage == stage && this.round == round;
 	}

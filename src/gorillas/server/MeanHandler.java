@@ -5,12 +5,20 @@ import javax.servlet.http.HttpServletRequest;
 import gorillas.Game;
 import gorillas.views.GameView;
 
+/**
+ * Handles users' requests to get the mean angle of the current round
+ * @author vahan
+ *
+ */
 public class MeanHandler extends Handler {
 
 	public MeanHandler(HttpServletRequest request, Game game) {
 		super(request, game);
 	}
 
+	/**
+	 * Returns the mean angles of up to now rounds separated by a white space
+	 */
 	@Override
 	public String handle() {
 		int stage = Integer.parseInt(request.getParameter("stage"));

@@ -5,6 +5,12 @@ import gorillas.views.GameView;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Handles users' submitted angles to the server
+ * The response is OK
+ * @author vahan
+ *
+ */
 public class AngleHandler extends Handler {
 	
 	public static final int ROUND_TO = 1;

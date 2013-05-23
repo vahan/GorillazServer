@@ -6,6 +6,11 @@ import java.text.SimpleDateFormat;
 
 import org.apache.commons.io.FileUtils;
 
+/**
+ * Saves the game to a text file
+ * @author vahan
+ *
+ */
 public class TextSaver {
 	
 	private Game game;

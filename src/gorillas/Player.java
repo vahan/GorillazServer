@@ -5,7 +5,11 @@ import java.util.Observable;
 
 import gorillas.views.GameView;
 
-
+/**
+ * Represents a player. Contains data about player's current condition.
+ * @author vahan
+ *
+ */
 public class Player extends Observable {
 	
 	private double[][] angles = new double[Game.STAGE_COUNT][Game.ROUND_COUNT + 1];
@@ -42,14 +46,6 @@ public class Player extends Observable {
 		return round;
 	}
 	
-	public void start() {
-		round = 0;
-		stage = 0;
-		GameView.LOGGER.log("Player " + id + " started");
-		setChanged();
-		notifyObservers();
-	}
-	
 	public boolean isReady() {
 		return submitted;
 	}
@@ -63,6 +59,34 @@ public class Player extends Observable {
 		this.isActive = isActive;
 	}
 	
+	public void setAngle(int stage, int round, double angle) {
+		angles[stage][round] = angle;
+		responseReceivedTime[stage][round] = new Date();
+		submitted = true;
+		GameView.LOGGER.log("Player " + id + " submitted angle " + angle + " at stage " + stage + " , round " + round);
+		setChanged();
+		notifyObservers();
+	}
+	
+	public double getAngle(int stage, int round) {
+		return angles[stage][round];
+	}
+
+	public Date getResponseReceivedTime(int stage, int round) {
+		return responseReceivedTime[stage][round];
+	}
+	
+	public void start() {
+		round = 0;
+		stage = 0;
+		GameView.LOGGER.log("Player " + id + " started");
+		setChanged();
+		notifyObservers();
+	}
+	
+	/**
+	 * Sets the player to the next round/stage
+	 */
 	public void goToNext() {
 		if (round == 0) {
 			responseReceivedTime[stage][round] = new Date();
@@ -83,27 +107,9 @@ public class Player extends Observable {
 		notifyObservers();
 	}
 	
-	
-	public void setAngle(int stage, int round, double angle) {
-		angles[stage][round] = angle;
-		responseReceivedTime[stage][round] = new Date();
-		submitted = true;
-		GameView.LOGGER.log("Player " + id + " submitted angle " + angle + " at stage " + stage + " , round " + round);
-		setChanged();
-		notifyObservers();
-	}
-	
-	public double getAngle(int stage, int round) {
-		return angles[stage][round];
-	}
-	
 	@Override
 	public String toString() {
 		return "Player: " + id;
-	}
-
-	public Date getResponseReceivedTime(int stage, int round) {
-		return responseReceivedTime[stage][round];
 	}
 	
 

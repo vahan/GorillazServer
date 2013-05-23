@@ -10,7 +10,11 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import gorillas.Game;
 
-
+/**
+ * Custom handler for jetty server
+ * @author vahan
+ *
+ */
 public class GorillasHandler extends AbstractHandler {
 	
 	private Handler handler;
@@ -20,6 +24,10 @@ public class GorillasHandler extends AbstractHandler {
 		this.game = game;
 	}
 	
+	/**
+	 * Receives the user requests, chooses the appropriate handler, 
+	 * passer the request to it and returns the resulting response to the user
+	 */
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) 
 	        throws IOException, ServletException
     {
@@ -33,23 +41,17 @@ public class GorillasHandler extends AbstractHandler {
         	response.getWriter().print("ERROR: Wrong request!");
         	return;
         }
-        /*if (!_handler.validate()) {
-        	System.out.println("Validation ERROR!");
-        	response.getWriter().println("NO");
-        	response.getWriter().flush();
-        	return;
-        }*/
         
         String resp = handler.handle();
         if (resp == null) return;
         response.getWriter().println(resp);
-        /*System.out.println("Response sent: " + Arrays.toString(response.getHeaderNames().toArray()));
-        for (String header : response.getHeaderNames()) {
-        	System.out.println(header + ": " + response.getHeader(header));
-        }*/
     }
 	
-	
+	/**
+	 * Gets the appropriate handler based on the request type
+	 * @param request
+	 * @return
+	 */
 	private Handler getHandler(HttpServletRequest request) {
 		String paramId = request.getParameter("id");
 		if (paramId != null && !paramId.isEmpty()) {
